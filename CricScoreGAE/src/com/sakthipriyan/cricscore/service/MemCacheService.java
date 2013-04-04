@@ -41,6 +41,10 @@ public class MemCacheService {
 	}
 	
 	public void putSimpleScore(SimpleScore score){
+		if(score == null){
+			logger.warning("SimpleScore is null");
+			return;
+		}
 	    cache.put(score.getId(), score);
 	}
 	
@@ -49,7 +53,10 @@ public class MemCacheService {
 	}
 	
 	public void setLiveScore(String livescore){
+		if(livescore == null){
+			logger.warning("Livescore is null");
+			return;
+		}
 		cache.put(LIVESCORE, livescore);
 	}
-	
 }

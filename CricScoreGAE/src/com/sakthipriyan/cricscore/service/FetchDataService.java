@@ -7,12 +7,16 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.logging.Logger;
 
 /**
  * @author sakthipriyan
  * 
  */
 public class FetchDataService {
+	
+	private static final Logger logger = Logger.getLogger(FetchDataService.class
+			.getName());
 
 	public static String BASE_URL = "http://www.espncricinfo.com/ci/engine/match/";
 	public static String LIVE_SCORE_URL = "http://static.espncricinfo.com/rss/livescores.xml";
@@ -40,6 +44,8 @@ public class FetchDataService {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		logger.fine("Title for match id " + id + " is " + title);
 		return title;
 	}
 
@@ -58,7 +64,9 @@ public class FetchDataService {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return builder.toString();
+		String matches = builder.toString();
+		logger.fine("Live score RSS: " + matches);
+		return matches;
 	}
 
 }

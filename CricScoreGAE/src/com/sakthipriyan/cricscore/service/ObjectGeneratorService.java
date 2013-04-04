@@ -50,12 +50,6 @@ public class ObjectGeneratorService {
 				NodeList title = element.getElementsByTagName("title");
 				line = (Element) title.item(0);
 				String detail = getCharacterDataFromElement(line);
-				if (detail.contains("Under-19s") || detail.contains("College")
-						|| detail.contains("School")
-						|| StringUtils.getSpaceCount(detail) > 10) {
-					// continue;
-					;
-				}
 				String[] teams = detail.split(" v ");
 				Match match = new Match(StringUtils.getNonNumeric(teams[0])
 						.trim(), StringUtils.getNonNumeric(teams[1]).trim(),
@@ -64,11 +58,11 @@ public class ObjectGeneratorService {
 			}
 
 		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
+			logger.severe(e.getMessage());
 		} catch (SAXException e) {
-			e.printStackTrace();
+			logger.severe(e.getMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.severe(e.getMessage());
 		}
 		logger.fine("Number of matches retrieved " + matches.size());
 		return matches;
@@ -77,8 +71,12 @@ public class ObjectGeneratorService {
 	
 
 	public SimpleScore getScore(String detail, String livescore, int id) {
+		SimpleScore simpleScore = null;
 		String simple = getSimpleString(livescore, id);
-		return new SimpleScore(simple, detail, id);
+		if(simple != null){
+			simpleScore = new SimpleScore(simple, detail, id);
+		}
+		return simpleScore;
 	};
 
 	private String getSimpleString(String livescore, int id) {
@@ -109,12 +107,13 @@ public class ObjectGeneratorService {
 			}
 
 		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
+			logger.severe(e.getMessage());
 		} catch (SAXException e) {
-			e.printStackTrace();
+			logger.severe(e.getMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.severe(e.getMessage());
 		}
+		logger.fine("Simple return from the RSS " + detail);
 		return detail;
 	}
 

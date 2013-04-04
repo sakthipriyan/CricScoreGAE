@@ -34,7 +34,7 @@ public class CricScoreServlet extends HttpServlet {
 		String responseString = null;
 		String paramId = (String) request.getParameter("id");
 		String paramTS = (String) request.getParameter("ts");
-		logger.fine("paramId: " + paramId + "paramTS: " + paramTS);
+		logger.info("ID = " + paramId + ", TS= " + paramTS);
 		
 		if (paramId == null) {
 			List<Match> matches = cricScoreService.getMatches();
@@ -43,12 +43,12 @@ public class CricScoreServlet extends HttpServlet {
 			
 			long timestamp = StringUtils.getLong(paramTS);
 			String[] matchIds = paramId.split(" ");
+			logger.finer("Request matches : " + matchIds);
 			List<SimpleScore> scores = new ArrayList<SimpleScore>();
 			for (String matchId : matchIds) {
 				int id = Integer.parseInt(matchId);
 				SimpleScore simpleScore = cricScoreService.getScore(id);
-				System.out.println(simpleScore);
-				if(timestamp == 0 || simpleScore.getTimestamp() > timestamp){
+				if(timestamp == 0 || (simpleScore != null && simpleScore.getTimestamp() > timestamp)){
 					scores.add(simpleScore);
 				}
 			}
@@ -60,7 +60,7 @@ public class CricScoreServlet extends HttpServlet {
 		}
 		
 		if (responseString != null) {
-			logger.finest("responseString: " + responseString);	
+			logger.finer("responseString: " + responseString);	
 			response.setContentType("application/json");
 			response.getWriter().println(responseString);
 		}
