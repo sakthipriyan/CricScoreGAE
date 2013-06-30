@@ -2,6 +2,7 @@ package com.sakthipriyan.cricscore.servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -33,15 +34,17 @@ public class CricScoreServlet extends HttpServlet {
 		
 		String responseString = null;
 		String paramId = (String) request.getParameter("id");
-		String paramTS = (String) request.getParameter("ts");
-		logger.info("ID = " + paramId + ", TS= " + paramTS);
-		
+		logger.info("ID = " + paramId);
 		if (paramId == null) {
 			List<Match> matches = cricScoreService.getMatches();
 			responseString = jsonHelperService.getMatchesJSON(matches);
 		} else if (StringUtils.isNumericPlus(paramId)) {
-			
-			long timestamp = StringUtils.getLong(paramTS);
+			long timestamp = 0;
+			Date lastModified = StringUtils.getDate(request.getHeader("If-Modified-Since"));
+			logger.info("lastModified = " + lastModified);
+			if(lastModified != null){
+				timestamp = lastModified.getTime();
+			}
 			String[] matchIds = paramId.split(" ");
 			logger.finer("Request matches : " + matchIds);
 			List<SimpleScore> scores = new ArrayList<SimpleScore>();
@@ -51,6 +54,10 @@ public class CricScoreServlet extends HttpServlet {
 				if(timestamp == 0 || (simpleScore != null && simpleScore.getTimestamp() > timestamp)){
 					scores.add(simpleScore);
 				}
+			}
+			if(scores.size() == 0){
+				response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+				return;	
 			}
 			responseString = jsonHelperService.getSimpleScoresJSON(scores, System.currentTimeMillis());
 			
@@ -62,6 +69,7 @@ public class CricScoreServlet extends HttpServlet {
 		if (responseString != null) {
 			logger.finer("responseString: " + responseString);	
 			response.setContentType("application/json");
+			response.addHeader("Last-Modified", StringUtils.getDate(new Date()));
 			response.getWriter().println(responseString);
 		}
 	}

@@ -33,24 +33,20 @@ public class JSONHelperService {
 
 	public String getSimpleScoresJSON(List<SimpleScore> simpleScores,
 			long timestamp) {
-		JSONObject object = new JSONObject();
+		JSONArray array = new JSONArray();
 		try {
-			object.put("ts", timestamp);
-			JSONArray array = new JSONArray();
+			
 			for (SimpleScore simpleScore : simpleScores) {
 				JSONObject scoreObject = new JSONObject();
 				scoreObject.put("id", simpleScore.getId());
 				scoreObject.put("si", simpleScore.getSimple());
 				scoreObject.put("de", simpleScore.getDetail());
-				
 				array.put(scoreObject);
 			}
-			object.put("sc", array);
 		} catch (JSONException e) {
 			logger.severe(e.getMessage());
 		}
-
-		return object.toString();
+		return array.toString();
 	}
-
+	
 }
