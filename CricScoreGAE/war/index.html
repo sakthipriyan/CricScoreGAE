@@ -1,27 +1,192 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<!-- The HTML 4.01 Transitional DOCTYPE declaration-->
-<!-- above set at the top of the file will set     -->
-<!-- the browser's rendering engine into           -->
-<!-- "Quirks Mode". Replacing this declaration     -->
-<!-- with a "Standards Mode" doctype is supported, -->
-<!-- but may lead to some differences in layout.   -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<title>Cricscore - Cricket Live Score API</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="css/bootstrap.min.css" media="screen" rel="stylesheet"
+	type="text/css">
+<link href="css/bootstrap-responsive.min.css" media="screen"
+	rel="stylesheet" type="text/css">
+<link rel="shortcut icon" type="image/png" href="img/ic_launcher.png">
+<style type="text/css">
+</style>
+</head>
+<body>
+	<div class="container">
+		<div class="navbar">
+			<div class="navbar-inner"><!-- 
+				<img src="img/ic_launcher.png"
+					style="height: 26px; width: 26px; float: left; display: inline;" /> --> 
+					<a
+					class="brand" href="/">Cricscore</a>
+				<ul class="nav pull-right">
+					<!--  <li><a href="#">Android App</a></li>  -->
+					<li class="divider-vertical"></li>
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown">Source Code <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li class="nav-header">Android</li>
+							<li><a href="https://github.com/spriyan/CricScoreApp">CricScore
+									App</a></li>
+							<li class="nav-header">API Backend</li>
+							<li><a href="https://github.com/spriyan/CricScoreGAE">CricScore
+									GAE</a></li>
+						</ul></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row-fluid">
+			<div class="alert alert-info">
+				<b>Cricscore</b> provides <b>Cricscore API</b> to fetch scores
+				programmatically and also <b>Cricscore App</b> for Android users.
+			</div>
+		</div>
+		<div class="row-fluid">
+			<div class="span6">
+				<div class="page-header">
+					<h1>Cricscore API</h1>
+				</div>
+				<p class="lead">Cricscore API is highly optimised to provide
+					near real time live cricket scores. Cricscore API provides RESTful
+					service to retrieve scores of live cricket matches. It is the
+					easiest way to fetch live cricket scores programmatically.</p>
+			</div>
+			<div class="span6">
+				<div class="page-header">
+					<h1>Cricscore App</h1>
+				</div>
+				<p class="lead">Cricscore App for Android is simple &amp; clean
+					android app for all cricket lovers.</p>
+			</div>
+		</div>
+		<div class="row-fluid">
+			<div class="page-header">
+				<h3>API Reference</h3>
+			</div>
+		</div>
+		<div class="row-fluid">
+			<p class="lead">List all available matches.</p>
+		</div>
+		<div class="row-fluid">
+			<div class="span6">
+				<span class="text-info">Request</span>
+				<pre class="prettyprint">
+GET /csa HTTP/1.1
+Host: cricscore-api.appspot.com
+</pre>
+Use this to fetch list of all available matches.
+			</div>
+			<div class="span6">
+				<span class="text-info">Response</span>
+				<pre class="prettyprint">
+HTTP/1.1 200 OK
+Content-Type: application/json
 
-<html>
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>Hello App Engine</title>
-  </head>
+[{"id":631136,"t2":"Kenya","t1":"Scotland"},{"id":585683,"t2":"England XI","t1":"Essex"},{"id":593618,"t2":"Worcestershire","t1":"Gloucestershire"},{"id":593617,"t2":"Sussex","t1":"Middlesex"},{"id":593615,"t2":"Durham","t1":"Yorkshire"},{"id":593616,"t2":"Surrey","t1":"Kent"},{"id":597924,"t2":"India","t1":"West Indies"}]
+</pre>
+			</div>
+		</div>
+		
+		<hr/>
+				<div class="row-fluid">
+	<p class="lead">Get/Update score for single match.</p>
+	</div>	
+	<div class="row-fluid">
+		<div class="span6">
+			<span class="text-info">Request</span>
+			<pre class="prettyprint">
+GET /csa?id=597924 HTTP/1.1
+Host: cricscore-api.appspot.com
+If-Modified-Since:Sun, 30 Jun 2013 23:58:22 IST
+</pre>
+Use this to get/update score of a particular match.<br/>
+Use If-Modified-Since header when updating.
+</div>
+			<div class="span6">
+		
+				<span class="text-info">Response </span>(scored changed)
+				<pre class="prettyprint">
+HTTP/1.1 200 OK
+Content-Type: application/json
+Last-Modified: Mon, 01 Jul 2013 00:34:12 IST
 
-  <body>
-    <h1>Hello App Engine!</h1>
-	
-    <table>
-      <tr>
-        <td colspan="2" style="font-weight:bold;">Available Servlets:</td>        
-      </tr>
-      <tr>
-        <td><a href="csa">CricScoreGAE</a></td>
-      </tr>
-    </table>
-  </body>
+[{"de":"WI 25/2 (3.1 ov, J Charles 12*, UT Yadav 2/7)","id":597924,"si":"West Indies 25/1 * v India 229/7"}]
+</pre>
+		<span class="text-info">Response </span>(no change)
+				<pre class="prettyprint">
+HTTP/1.1 304 Not Modified
+</pre>
+			</div>
+		</div>
+
+		<hr/>
+				<div class="row-fluid">
+	<p class="lead">Get/Update scores for multiple matches.</p>
+	</div>	
+	<div class="row-fluid">
+		<div class="span6">
+			<span class="text-info">Request</span>
+			<pre class="prettyprint">
+GET /csa?id=631136+585683 HTTP/1.1
+Host: cricscore-api.appspot.com
+If-Modified-Since:Sun, 30 Jun 2013 23:58:22 IST
+</pre>
+Use this to get scores of multiple matches.
+</div>
+			<div class="span6">
+				<span class="text-info">Response</span> (all matches changed)
+				<pre class="prettyprint">
+HTTP/1.1 200 OK
+Content-Type: application/json
+Last-Modified: Mon, 01 Jul 2013 00:48:02 IST
+
+[{"de":"Kenya 230 (49.1 ov, JO Ngoche 1*, NM Carter 1/49) - Match over","id":631136,"si":"Scotland 242/4 v Kenya 230/10 *"},{"de":"EngXI 328/7 (90.0 ov, GP Swann 62*, TT Bresnan 55*, DD Masters 0/54) - Stumps","id":585683,"si":"Essex v England XI 328/7 *"}]
+</pre>
+
+<span class="text-info">Response </span>(few matches changed)
+				<pre class="prettyprint">
+HTTP/1.1 200 OK
+Content-Type: application/json
+Last-Modified: Mon, 01 Jul 2013 00:51:00 IST
+
+[{"de":"WI 27/3 (6.3 ov, J Charles 12*, DM Bravo 0*, B Kumar 1/18)","id":597924,"si":"West Indies 26/3 * v India 229/7"}]
+</pre>
+<span class="text-info">Response </span>(no change)
+				<pre class="prettyprint">
+HTTP/1.1 304 Not Modified
+</pre>
+			</div>
+		</div>
+
+
+
+		
+	</div>
+
+	<footer
+		style="padding: 10px; margin-top:30px; border-top: 1px solid #E5E5E5; background-color: whiteSmoke;">
+		<div class="container">
+			<p>
+				Designed and developed by <a href="http://twitter.com/sakthipriyan"
+					target="_blank">@sakthipriyan</a>. <span class="pull-right">
+					Code licensed under <a
+					href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache
+						License v2.0</a>, documentation under <a
+					href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.
+				</span>
+			</p>
+		</div>
+
+	</footer>
+
+	<script src="js/jquery-1.7.1.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+
+
+
+</body>
 </html>
